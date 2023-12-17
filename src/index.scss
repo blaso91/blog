@@ -1,0 +1,19 @@
+.posts-list {
+    >div {
+        margin-bottom: 15px;
+    }
+}
+
+.ranking-table {
+    >div:nth-child(1) {
+        font-size: xx-large;
+    }
+
+    >div:nth-child(2) {
+        font-size: x-large;
+    }
+
+    >div:nth-child(3) {
+        font-size: larger;
+    }
+}
