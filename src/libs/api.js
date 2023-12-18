@@ -37,5 +37,22 @@ export const Posts = {
         } catch (error) {
             throw error;
         }
+    },
+    Create: async (title, text) => {
+        const user = localStorage.getItem("user");
+        if (!user)
+            return null;
+        const userId = user.id;
+        try {
+            const res = (await axios.post(API_BASE_URL + "/posts", {
+                title,
+                body: text,
+                userId
+            })).data;
+            console.log(res);
+            return res;
+        } catch (error) {
+            return null;
+        }
     }
 }

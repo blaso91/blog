@@ -5,15 +5,19 @@
 }
 
 .ranking-table {
-    >div:nth-child(1) {
-        font-size: xx-large;
-    }
+    >div {
+        transition: all 0.5s;
 
-    >div:nth-child(2) {
-        font-size: x-large;
-    }
+        // &:nth-child(1) {
+        //     font-size: xx-large;
+        // }
 
-    >div:nth-child(3) {
-        font-size: larger;
+        // &:nth-child(2) {
+        //     font-size: x-large;
+        // }
+
+        // &:nth-child(3) {
+        //     font-size: larger;
+        // }
     }
 }

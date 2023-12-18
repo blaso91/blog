@@ -12,6 +12,14 @@ function RankingTable() {
 
     useEffect(() => {
         GetRankingData();
+        const interval = setInterval(() => {
+            const wrapper = document.querySelector('.ranking-table');
+            const item = wrapper.querySelector('div');
+            const _item = wrapper.querySelector('div:nth-child(5)');
+            item.style.transform = `translateY(${_item.offsetTop - item.offsetTop}px)`;
+            _item.style.transform = `translateY(${item.offsetTop - _item.offsetTop}px)`;
+        }, 5000)
+        return () => { clearInterval(interval) }
     }, [])
 
     return (
@@ -24,7 +32,13 @@ function RankingTable() {
                     if (a.totalScore < b.totalScore)
                         return 1;
                     return 0;
-                }).map((user, i) => <div key={i}>{i + 1}. {user.name} {user.totalScore}</div>)}
+                }).map((user, i) => (
+                    <div key={i}>
+                        <span>{i + 1}. </span>
+                        <span>{user.name} </span>
+                        <span>{user.totalScore}</span>
+                    </div>
+                ))}
             </div>
         </Box>
     )

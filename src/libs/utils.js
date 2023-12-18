@@ -1,17 +1,15 @@
 import { Posts, Users } from "./api";
 
-export async function GetStatsFromUser(user, postsList) {
-    if (!user)
+export async function GetStatsFromUserId(userId, postsList) {
+    if (!userId)
         return null;
-    const userId = user.id;
     const posts = postsList || await Posts.GetList();
     const userPosts = posts.filter(post => post.userId == userId)
     const iniScore = 0;
     const totalScore = userPosts.reduce((prevCount, currPost) => prevCount + GetScoreFromPost(currPost), iniScore);
     return {
         writtenPosts: userPosts.length,
-        totalScore: totalScore,
-        name: user.name
+        totalScore: totalScore
     }
 }
 
@@ -20,7 +18,11 @@ export async function GetRankings() {
     const posts = await Posts.GetList();
     const usersStats = [];
     users.forEach(async user => {
-        usersStats.push(await GetStatsFromUser(user, posts));
+        const userObj = {
+            ...await GetStatsFromUserId(user.id, posts),
+            name: user.name
+        }
+        usersStats.push(userObj);
     })
     return usersStats;
 }
