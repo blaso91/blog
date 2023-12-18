@@ -29,6 +29,7 @@ function StatsTable() {
                             Statistiche
                             <div>Numero di post scritti: {stats.writtenPosts}</div>
                             <div>Punteggio totale: {stats.totalScore}</div>
+                            <div>Posizione in classifica: {stats.rank}</div>
                         </div>
                     )}
                     <Button onClick={() => { setPostDialogOpen(true) }}>CREA POST</Button>

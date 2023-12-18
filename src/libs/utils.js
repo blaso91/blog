@@ -32,3 +32,13 @@ export function GetScoreFromPost(postObj) {
         return 0;
     return postObj.body.split(' ').length;
 }
+
+/**
+ * https://www.w3resource.com/javascript/form/email-validation.php
+ */
+export function ValidateEmail(mail) {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+        return true
+
+    return false
+}

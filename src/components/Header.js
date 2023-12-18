@@ -14,9 +14,8 @@ import LoginDialog from './LoginDialog';
 
 export default function Header() {
     const [loginDialogOpen, setLoginDialogOpen] = useState(false);
-    const [auth, setAuth] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -26,6 +25,12 @@ export default function Header() {
         setAnchorEl(null);
     };
 
+    const logout = () => {
+        localStorage.removeItem('user');
+        setUser(null);
+        location.reload();
+    }
+
     return (
         <>
             <Box sx={{ flexGrow: 1 }}>
@@ -34,7 +39,7 @@ export default function Header() {
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             iBlog
                         </Typography>
-                        {auth ? (
+                        {user ? (
                             <div>
                                 <IconButton
                                     size="large"
@@ -61,13 +66,10 @@ export default function Header() {
                                     open={Boolean(anchorEl)}
                                     onClose={handleClose}
                                 >
-                                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                                    <MenuItem onClick={() => { logout() }}>Esci</MenuItem>
                                 </Menu>
                             </div>
-                        ) : user ? (
-                            <Button onClick={() => { localStorage.removeItem('user'); location.reload() }} color="inherit">Esci</Button>
-                        ) : (
+                        ) : !user && (
                             <Button onClick={() => { setLoginDialogOpen(true) }} color="inherit">Accedi</Button>
                         )}
                     </Toolbar>

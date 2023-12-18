@@ -34,8 +34,8 @@ function RankingTable() {
                     return 0;
                 }).map((user, i) => (
                     <div key={i}>
-                        <span>{i + 1}. </span>
-                        <span>{user.name} </span>
+                        <span>{i + 1}</span>
+                        <span>{user.name}</span>
                         <span>{user.totalScore}</span>
                     </div>
                 ))}
