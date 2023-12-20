@@ -1,6 +1,10 @@
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar, TextField, TextareaAutosize } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Posts } from "../libs/api";
+import { StatsContext } from "../contexts/StatsContext";
+import { AnimateRankingList, GetRankings } from "../libs/utils";
+import { UserContext } from "../contexts/UserContext";
+import { LoadingButton } from "@mui/lab";
 
 function CreatePostDialog({ open, handleClose }) {
     const [successMessageOpen, setSuccessMessageOpen] = useState(false);
@@ -8,6 +12,9 @@ function CreatePostDialog({ open, handleClose }) {
     const [titleError, setTitleError] = useState(false);
     const [text, setText] = useState("");
     const [textError, setTextError] = useState(false);
+    const { setStats, stats } = useContext(StatsContext);
+    const { user } = useContext(UserContext);
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const handleSubmit = async () => {
         if (title.trim() == "")
@@ -15,10 +22,20 @@ function CreatePostDialog({ open, handleClose }) {
         if (text.trim() == "")
             return setTextError(true);
 
+        setIsSubmitting(true)
         const post = await Posts.Create(title, text);
+        setIsSubmitting(false);
         if (post) {
             handleClose();
             setSuccessMessageOpen(true);
+            const currPos = stats.rankings.findIndex(rankedUser => rankedUser.id == user.id) + 1;
+            const updatedRankings = GetRankings(stats.users, [...stats.posts, post]);
+            const targetPos = updatedRankings.findIndex(rankedUser => rankedUser.id == user.id) + 1;
+            await AnimateRankingList(currPos, targetPos);
+            setStats(prevState => ({
+                ...prevState,
+                posts: [...prevState.posts, post]
+            }))
         }
     }
 
@@ -73,7 +90,7 @@ function CreatePostDialog({ open, handleClose }) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Annulla</Button>
-                <Button onClick={handleSubmit}>Crea</Button>
+                <LoadingButton loading={isSubmitting} onClick={handleSubmit}>Crea</LoadingButton>
             </DialogActions>
         </Dialog>
         <Snackbar open={successMessageOpen} autoHideDuration={6000} onClose={() => { setSuccessMessageOpen(false) }}>

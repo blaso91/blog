@@ -39,7 +39,7 @@ export const Posts = {
         }
     },
     Create: async (title, text) => {
-        const user = localStorage.getItem("user");
+        const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
         if (!user)
             return null;
         const userId = user.id;

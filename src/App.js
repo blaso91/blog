@@ -6,24 +6,27 @@ import RankingTable from './components/RankingTable';
 import { Container, Grid } from '@mui/material';
 import StatsTable from './components/StatsTable';
 import { UserContextProvider } from './contexts/UserContext';
+import { StatsContextProvider } from './contexts/StatsContext';
 
 export function App() {
   return (
     <>
-      <UserContextProvider>
-        <CssBaseline />
-        <Header />
-        <Container sx={{ mt: 2 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={8}>
-              <StatsTable />
+      <StatsContextProvider>
+        <UserContextProvider>
+          <CssBaseline />
+          <Header />
+          <Container sx={{ mt: 2 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={7}>
+                <StatsTable />
+              </Grid>
+              <Grid item xs={5}>
+                <RankingTable />
+              </Grid>
             </Grid>
-            <Grid item xs={4}>
-              <RankingTable />
-            </Grid>
-          </Grid>
-        </Container>
-      </UserContextProvider>
+          </Container>
+        </UserContextProvider>
+      </StatsContextProvider>
     </>
   );
 }

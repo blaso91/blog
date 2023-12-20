@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { Auth } from "../libs/api";
 import { ValidateEmail } from "../libs/utils";
+import { LoadingButton } from "@mui/lab";
 
 function LoginDialog({ open, handleClose }) {
     const [successMessageOpen, setSuccessMessageOpen] = useState(false);
@@ -11,6 +12,7 @@ function LoginDialog({ open, handleClose }) {
     const [password, setPassword] = useState("");
     const [passwordError, setPasswordError] = useState(false);
     const { setUser } = useContext(UserContext);
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const handleLogin = async () => {
         if (email.trim() == "" || ValidateEmail(email) == false)
@@ -18,7 +20,9 @@ function LoginDialog({ open, handleClose }) {
         if (password.trim() == "")
             return setPasswordError(true);
 
+        setIsSubmitting(true);
         const res = await Auth.Login(email, password);
+        setIsSubmitting(false);
         if (res) {
             setUser(res);
             localStorage.setItem('user', JSON.stringify(res));
@@ -77,7 +81,7 @@ function LoginDialog({ open, handleClose }) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Annulla</Button>
-                    <Button onClick={handleLogin}>Accedi</Button>
+                    <LoadingButton loading={isSubmitting} onClick={handleLogin}>Accedi</LoadingButton>
                 </DialogActions>
             </Dialog>
             <Snackbar open={successMessageOpen} autoHideDuration={6000} onClose={() => { setSuccessMessageOpen(false) }}>

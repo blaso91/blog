@@ -41,6 +41,7 @@ export default function Header() {
                         </Typography>
                         {user ? (
                             <div>
+                                Ciao, {user.name}
                                 <IconButton
                                     size="large"
                                     aria-label="account of current user"
