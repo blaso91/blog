@@ -76,12 +76,6 @@
     flex-shrink: 0;
 }
 
-.posts-list {
-    >div {
-        margin-bottom: 15px;
-    }
-}
-
 .ranking-table {
     >div {
         transition: all 0.5s;
@@ -105,6 +99,25 @@
                 font-size: 1.3rem;
                 flex-shrink: 0;
                 @include off-position;
+
+                &.pos {
+                    &.first-pos {
+                        @include first-position;
+                    }
+
+                    &.second-pos {
+                        @include second-position;
+                    }
+
+                    &.third-pos {
+                        @include third-position;
+                    }
+
+                    &.off-pos {
+                        background: unset;
+                        @include off-position;
+                    }
+                }
             }
 
             &:last-child {

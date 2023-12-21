@@ -66,10 +66,18 @@ function StatsTable() {
                         {stats && (
                             <div className="stats-recap">
                                 <div className="stats-recap-table">
-                                    <div className="stats-recap-score">
-                                        <span className="stats-recap-score-label">Numero di post scritti</span>
-                                        <span className="stats-recap-score-value">{rankedUser?.writtenPosts}</span>
-                                    </div>
+                                    {stats.scoreType != 1 && (
+                                        <div className="stats-recap-score">
+                                            <span className="stats-recap-score-label">Numero di post scritti</span>
+                                            <span className="stats-recap-score-value">{rankedUser?.writtenPosts}</span>
+                                        </div>
+                                    )}
+                                    {stats.scoreType == 1 && (
+                                        <div className="stats-recap-score">
+                                            <span className="stats-recap-score-label">Punteggio totale</span>
+                                            <span className="stats-recap-score-value">{rankedUser?.totalScore}</span>
+                                        </div>
+                                    )}
                                     <div className="stats-recap-rank">
                                         <span className="stats-recap-rank-label">Posizione in classifica</span>
                                         <span className={"stats-recap-rank-value" + " " + getClassNameByRank()}>{rank}</span>
@@ -77,14 +85,24 @@ function StatsTable() {
                                 </div>
                             </div>
                         )}
-                        {precedingRankedUser && (
+                        {precedingRankedUser && stats.scoreType != 1 && (
                             <div className="preceding-following-message">
                                 <Chip>{precedingRankedUser.name}</Chip> ti precede con <Chip>{precedingRankedUser.writtenPosts}</Chip> post, <Chip>{precedingRankedUser.writtenPosts - rankedUser.writtenPosts}</Chip> in più di te.
                             </div>
                         )}
-                        {followingRankedUser && (
+                        {precedingRankedUser && stats.scoreType == 1 && (
+                            <div className="preceding-following-message">
+                                <Chip>{precedingRankedUser.name}</Chip> ti precede con <Chip>{precedingRankedUser.totalScore}</Chip> punti, <Chip>{precedingRankedUser.totalScore - rankedUser.totalScore}</Chip> in più di te.
+                            </div>
+                        )}
+                        {followingRankedUser && stats.scoreType != 1 && (
                             <div className="preceding-following-message">
                                 <Chip>{followingRankedUser.name}</Chip> ti insegue con <Chip>{followingRankedUser.writtenPosts}</Chip> post, <Chip>{rankedUser.writtenPosts - followingRankedUser.writtenPosts}</Chip> in meno di te.
+                            </div>
+                        )}
+                        {followingRankedUser && stats.scoreType == 1 && (
+                            <div className="preceding-following-message">
+                                <Chip>{followingRankedUser.name}</Chip> ti insegue con <Chip>{followingRankedUser.totalScore}</Chip> punti, <Chip>{rankedUser.totalScore - followingRankedUser.totalScore}</Chip> in meno di te.
                             </div>
                         )}
                         <div className="rank-feedback-message">

@@ -18,7 +18,7 @@ function RankingTable() {
                             <span className="name">{user.name}</span>
                             <span className="email">{user.email}</span>
                         </div>
-                        <span className="score">{user.writtenPosts}</span>
+                        <span className="score">{stats.scoreType == 1 ? user.totalScore : user.writtenPosts}</span>
                     </div>
                 ))}
             </div>

@@ -8,13 +8,14 @@ export function StatsContextProvider({ children }) {
     const [stats, setStats] = useState({
         posts: [],
         users: [],
-        rankings: []
+        rankings: [],
+        scoreType: new URLSearchParams(location.search).get('scoreType')
     })
 
     const GetStats = async () => {
         const posts = await Posts.GetList();
         const users = await Users.GetList();
-        const rankings = GetRankings(users, posts);
+        const rankings = GetRankings(users, posts, stats.scoreType);
         setStats(prevState => ({
             ...prevState,
             posts,
@@ -27,13 +28,13 @@ export function StatsContextProvider({ children }) {
         GetStats()
     }, [])
 
-    // when posts or users get updated I recalculate rankings
+    // when posts get updated I recalculate rankings
     useEffect(() => {
         setStats(prevState => ({
             ...prevState,
-            rankings: GetRankings(stats.users, stats.posts)
+            rankings: GetRankings(stats.users, stats.posts, stats.scoreType)
         }))
-    }, [stats.posts, stats.users])
+    }, [stats.posts])
 
     return (
         <StatsContext.Provider value={{ stats, setStats }}>

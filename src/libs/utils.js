@@ -11,29 +11,49 @@ export function GetStatsFromUserId(userId, postsList) {
     }
 }
 
-export function AnimateRankingList(currPos, targetPos) {
+export function AnimateRankingList(currPos, targetPos, score) {
     return new Promise((resolve, reject) => {
+
+        const getClassByRank = rank => {
+            let className = '';
+            switch (rank) {
+                case 1:
+                    className = 'first-pos';
+                    break;
+                case 2:
+                    className = 'second-pos';
+                    break;
+                case 3:
+                    className = 'third-pos';
+                    break;
+                default:
+                    className = 'off-pos';
+                    break;
+            }
+            return className;
+        }
+
         const wrapper = document.querySelector('.ranking-table');
         const targetItem = wrapper.querySelector(`.ranked-user:nth-child(${targetPos})`);
         const currItem = wrapper.querySelector(`.ranked-user:nth-child(${currPos})`);
         let itemToMove = targetItem;
         for (let i = 0; i < currPos - targetPos; i++) {
-            itemToMove.querySelector('.pos').textContent = targetPos + i + 1;
+            const newRank = targetPos + i + 1;
+            const className = getClassByRank(newRank);
+            itemToMove.querySelector('.pos').textContent = newRank;
+            itemToMove.querySelector('.pos').classList.add(className);
             itemToMove.style.transform = `translateY(${itemToMove.nextElementSibling.offsetTop - itemToMove.offsetTop}px)`;
             itemToMove = itemToMove.nextElementSibling;
         }
         currItem.style.transform = `translateY(${targetItem.offsetTop - currItem.offsetTop}px)`;
         currItem.querySelector('.pos').textContent = targetPos;
+        currItem.querySelector('.pos').classList.add(getClassByRank(targetPos))
+        currItem.querySelector('.score').textContent = score;
         setTimeout(() => { resolve() }, 500)
     })
 }
 
-export function ResetAnimation() {
-    const items = document.querySelectorAll('.ranking-table .ranked-user');
-    items.forEach(item => item.style.transform = "");
-}
-
-export function GetRankings(users, posts) {
+export function GetRankings(users, posts, scoreType) {
     const usersStats = [];
     users.forEach(async user => {
         const userObj = {
@@ -44,6 +64,14 @@ export function GetRankings(users, posts) {
         }
         usersStats.push(userObj);
     })
+    if (scoreType == 1)
+        return usersStats.sort((a, b) => {
+            if (a.totalScore > b.totalScore)
+                return -1;
+            if (a.totalScore < b.totalScore)
+                return 1;
+            return 0;
+        });
     return usersStats.sort((a, b) => {
         if (a.writtenPosts > b.writtenPosts)
             return -1;

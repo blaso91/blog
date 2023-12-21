@@ -29,9 +29,9 @@ function CreatePostDialog({ open, handleClose }) {
             handleClose();
             setSuccessMessageOpen(true);
             const currPos = stats.rankings.findIndex(rankedUser => rankedUser.id == user.id) + 1;
-            const updatedRankings = GetRankings(stats.users, [...stats.posts, post]);
+            const updatedRankings = GetRankings(stats.users, [...stats.posts, post], stats.scoreType);
             const targetPos = updatedRankings.findIndex(rankedUser => rankedUser.id == user.id) + 1;
-            await AnimateRankingList(currPos, targetPos);
+            await AnimateRankingList(currPos, targetPos, updatedRankings[targetPos - 1][stats.scoreType == 1 ? 'totalScore' : 'writtenPosts']);
             setStats(prevState => ({
                 ...prevState,
                 posts: [...prevState.posts, post]
